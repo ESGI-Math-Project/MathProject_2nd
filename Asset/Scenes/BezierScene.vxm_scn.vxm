@@ -1,0 +1,62 @@
+Scene:
+  Name: Bezier Test Scene
+  Entities:
+    - Entity: 11740930801068015127
+      IsActive: true
+      TagComponent:
+        Tag: Bezier 4
+      TransformComponent:
+        Position: [0, 0, 0]
+        Rotation: [0, 0, 0, 1]
+        EulerRotation: [0, 0, 0]
+        Scale: [1, 1, 1]
+      BezierCurve:
+        Material: 6501812136981279580
+        ControlPoints:
+          - [-1, 0, 0]
+          - [0, 1, 1]
+          - [0, -1, -1]
+          - [1, 0, 0]
+        Definition: 1000
+    - Entity: 14394610461620696109
+      IsActive: true
+      TagComponent:
+        Tag: Bezier Pascal
+      TransformComponent:
+        Position: [0, 2.65055084, 0]
+        Rotation: [0, 0, 0, 1]
+        EulerRotation: [0, -0, 0]
+        Scale: [1, 1, 1]
+      GenericBezierCurve:
+        Continuity: Continuity::Acceleration
+        Definition: 1000
+        ControlPoints: 2
+        Material: 14132953702282159457
+        Points:
+          - [-2.5, 0, 0]
+          - [-1, 1.60000002, 0]
+          - [1.20000005, -1.20000005, 0]
+          - [2.79999995, 0, 0]
+        Matrices:
+          []
+    - Entity: 2226065756233094032
+      IsActive: true
+      TagComponent:
+        Tag: Bezier Castlejau
+      TransformComponent:
+        Position: [0, -2.30941772, 0]
+        Rotation: [0, 0, 0, 1]
+        EulerRotation: [0, -0, 0]
+        Scale: [1, 1, 1]
+      GenericBezierCurve:
+        Continuity: Continuity::Position
+        Definition: 1000
+        ControlPoints: 2
+        Material: 1069266738333071017
+        Points:
+          - [-2.4000001, 0, 0]
+          - [-1, 1, 0]
+          - [1.5, -1.20000005, 0]
+          - [2.5999999, 0, 0]
+        Matrices:
+          []

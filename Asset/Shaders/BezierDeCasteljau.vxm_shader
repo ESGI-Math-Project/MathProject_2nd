@@ -1,0 +1,8 @@
+Type: AssetType::Shader
+Shader:
+  Name: BezierDeCasteljau
+  Sources:
+    - 13565445117755381563
+    - 7563315893819623377
+    - 8552950103494062726
+    - 7408055824618193802
