@@ -1,5 +1,4 @@
-Type:
-  AssetRegistry
+Type: AssetRegistry
 AssetRegistry:
   Assets:
     - Handle: 767692958919381968
