@@ -68,3 +68,14 @@ Scene:
           - [6.10000038, -1, 0]
         Matrices:
           []
+    - Entity: 10666672931233083523
+      IsActive: true
+      TagComponent:
+        Tag: BSpline
+      TransformComponent:
+        Position: [-1.10222709, 0.209945679, 0]
+        Rotation: [0, 0, 0, 1]
+        EulerRotation: [0, -0, 0]
+        Scale: [1, 1, 1]
+      BSplinesComponents:
+        {}

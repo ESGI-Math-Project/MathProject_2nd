@@ -19,15 +19,24 @@ AssetRegistry:
     - Handle: 2176829156368268480
       FilePath: {Source: 4, Path: MemoryAssets/2176829156368268480.vxm_memory}
       Type: AssetType::Scene
+    - Handle: 4402394489927246260
+      FilePath: {Source: 1, Path: Images\Play.png}
+      Type: AssetType::Texture2D
     - Handle: 5003646183903738526
       FilePath: {Source: 4, Path: MemoryAssets/5003646183903738526.vxm_memory}
       Type: AssetType::Scene
+    - Handle: 5198630536478053218
+      FilePath: {Source: 1, Path: Shaders\FlatColor.frag}
+      Type: AssetType::ShaderSource
     - Handle: 6166524610277000624
       FilePath: {Source: 4, Path: MemoryAssets/6166524610277000624.vxm_memory}
       Type: AssetType::Scene
     - Handle: 6501812136981279580
       FilePath: {Source: 2, Path: Materials\Bezier4.vxm_material}
       Type: AssetType::Material
+    - Handle: 7106198063288636744
+      FilePath: {Source: 1, Path: Shaders\TextureShader.vert}
+      Type: AssetType::ShaderSource
     - Handle: 7136703435398607860
       FilePath: {Source: 4, Path: MemoryAssets/7136703435398607860.vxm_memory}
       Type: AssetType::Scene
@@ -36,6 +45,18 @@ AssetRegistry:
       Type: AssetType::ShaderSource
     - Handle: 7563315893819623377
       FilePath: {Source: 1, Path: Shaders\Bezier\Bezier.tessco}
+      Type: AssetType::ShaderSource
+    - Handle: 7809983361053135819
+      FilePath: {Source: 1, Path: Images\Pause.png}
+      Type: AssetType::Texture2D
+    - Handle: 7863116004276607893
+      FilePath: {Source: 2, Path: Materials\BSplineMaterial.vxm_material}
+      Type: AssetType::Material
+    - Handle: 7955877217937067201
+      FilePath: {Source: 1, Path: Images\Stop.png}
+      Type: AssetType::Texture2D
+    - Handle: 8017629846075923453
+      FilePath: {Source: 2, Path: ShaderSources\BSplineSource.tessev}
       Type: AssetType::ShaderSource
     - Handle: 8098330176453956795
       FilePath: {Source: 1, Path: Shaders\Bezier4\Bezier4.tessco}
@@ -49,6 +70,9 @@ AssetRegistry:
     - Handle: 8676590476146596977
       FilePath: {Source: 2, Path: Scenes\BezierScene.vxm_scn}
       Type: AssetType::Scene
+    - Handle: 9791039593552689008
+      FilePath: {Source: 1, Path: Shaders\TextureShader.frag}
+      Type: AssetType::ShaderSource
     - Handle: 9851964826079991738
       FilePath: {Source: 1, Path: Shaders\Bezier4\Bezier4.geom}
       Type: AssetType::ShaderSource
@@ -70,6 +94,9 @@ AssetRegistry:
     - Handle: 12644949253861293824
       FilePath: {Source: 1, Path: Shaders\Bezier4\Bezier4.tessev}
       Type: AssetType::ShaderSource
+    - Handle: 13192963808219188046
+      FilePath: {Source: 1, Path: Shaders\FlatColor.vert}
+      Type: AssetType::ShaderSource
     - Handle: 13565445117755381563
       FilePath: {Source: 1, Path: Shaders\Bezier\Bezier.frag}
       Type: AssetType::ShaderSource
@@ -79,6 +106,9 @@ AssetRegistry:
     - Handle: 14501197852061985280
       FilePath: {Source: 1, Path: Shaders\Bezier4\Bezier4.vert}
       Type: AssetType::ShaderSource
+    - Handle: 15844405393725116796
+      FilePath: {Source: 2, Path: Shaders\BSpline.vxm_shader}
+      Type: AssetType::Shader
     - Handle: 16039519178751608459
       FilePath: {Source: 2, Path: Shaders\BezierPascal.vxm_shader}
       Type: AssetType::Shader
