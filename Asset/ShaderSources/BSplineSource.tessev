@@ -150,56 +150,26 @@ float GetKnotWeight(int i)
 }
 
 vec3 deBoor(int segment, float t) {
-    vec3 v[NUM_CONTROL_POINTS_MAX];
-    //float w[NUM_CONTROL_POINTS_MAX];
+    vec4 v[NUM_CONTROL_POINTS_MAX];
 
     int order = u_Degree + 1;
-
-    // t = mix(GetKnot(u_Degree), GetKnot(u_NumberControlPoint - order), t);
-    //
-    // // find s (the spline segment) for the [t] value provided
-    // int segment = u_Degree;
-    // 
-    // while (segment < (u_NumberControlPoint - order))
-    // {
-    //     if(t >= GetKnot(segment) && t <= GetKnot(segment+1))
-    //     {
-    //         break;
-    //     }
-    //     segment += 1;
-    // }
     
     // First level
     for (int i = 0; i < u_NumberControlPoint; i++) {
-        v[i] = GetControlPoint(i);
-        //w[i] = GetKnotWeight(i + segment - u_Degree);
+        v[i] = vec4(GetControlPoint(i) * GetWeight(i), GetWeight(i));
     }
     
-    for(int L = 1; L <= order; L++) {
-        for(int i = segment; i > segment + L - order; i--) {
+    for(int level = 1; level <= order; level++) {
+        for(int i = segment; i > segment + level - order; i--) {
             float numerator = t - GetKnot(i);
-            float denominator = GetKnot(i - L + order) - GetKnot(i);
+            float denominator = GetKnot(i - level + order) - GetKnot(i);
             float alpha = numerator / denominator;
-            v[i] = alpha * v[i] + (1-alpha) * v[i-1];
+            v[i] = alpha *  v[i] + (1-alpha) * v[i-1];
         }
     }
 
-    return v[segment];
+    return v[segment].xyz / v[segment].w;
 }
-
-// vec3 nurbsInterpolation(float t)
-// {
-//     vec3 position = vec3(0); 
-//     float alpha = 0.0;
-//     for(int i = 0; i < u_NumberOfKnot; i++)
-//     {
-//         float a = GetKnotWeight(i) * deBoor(t);
-//         alpha += a;
-//         position += a * GetKnotWeight(i);
-//     }
-// 
-//     return position / alpha; 
-// }
 
 layout(isolines) in;
 
