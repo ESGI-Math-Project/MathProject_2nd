@@ -106,6 +106,9 @@ AssetRegistry:
     - Handle: 14501197852061985280
       FilePath: {Source: 1, Path: Shaders\Bezier4\Bezier4.vert}
       Type: AssetType::ShaderSource
+    - Handle: 14844836266454144155
+      FilePath: {Source: 2, Path: ShaderSources\BSplineSource.tessco}
+      Type: AssetType::ShaderSource
     - Handle: 15844405393725116796
       FilePath: {Source: 2, Path: Shaders\BSpline.vxm_shader}
       Type: AssetType::Shader

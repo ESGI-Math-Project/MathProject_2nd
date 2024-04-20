@@ -1,48 +1,46 @@
 Scene:
   Name: BezierScene
   Entities:
-    - Entity: 6063967340830853876
+    - Entity: 10666672931233083523
       IsActive: true
       TagComponent:
-        Tag: Castlejau
+        Tag: BSpline
       TransformComponent:
-        Position: [-7.30000019, -1.39999998, 0]
-        Rotation: [0, 0, 0, 1]
-        EulerRotation: [0, 0, 0]
-        Scale: [1, 1, 1]
-      GenericBezierCurve:
-        Continuity: Continuity::Acceleration
-        Definition: 1000
-        ControlPoints: 2
-        Material: 1069266738333071017
-        Points:
-          - [-2.5999999, 0, 0]
-          - [0, 1.29999995, 0]
-          - [0, -1.20000005, 0]
-          - [3.00408888, -1.19999993, 0]
-          - [3.00408888, -1.19999993, 0]
-          - [6.00817776, -1.19999981, 0]
-          - [6.00817776, 1.30000019, 0]
-          - [0, -4.30000019, 0]
-        Matrices:
-          []
-    - Entity: 11714078419489869922
-      IsActive: true
-      TagComponent:
-        Tag: Bezier 4
-      TransformComponent:
-        Position: [0, 0.697555184, 0]
+        Position: [0.138673007, 4.01168442, 0]
         Rotation: [0, 0, 0, 1]
         EulerRotation: [0, -0, 0]
         Scale: [1, 1, 1]
-      BezierCurve:
-        Material: 6501812136981279580
-        ControlPoints:
-          - [-1, 0, 0]
-          - [0, 1, 0]
-          - [0, -1, 0]
-          - [1, 0, 0]
+      BSplinesComponents:
+        Material: 7863116004276607893
+        Degree: 1
         Definition: 1000
+        Points:
+          - [-4.27917576, 1.07749081, 0.000183239841]
+          - [-0.42531389, 4.4062624, -0.00030520928]
+          - [5.31976032, 3.62324476, 6.20588617e-05]
+          - [7.70892477, -0.594538212, 0]
+          - [4.57845783, -3.6341002, -2.80587119e-06]
+          - [-4.45304632, -3.84209061, 0.000184331511]
+        Nodes:
+          - 0
+          - 0
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+          - 5
+          - 5
+          - 5
+        Weights:
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+          - 1
+        Matrices:
+          []
     - Entity: 12906212369099646248
       IsActive: true
       TagComponent:
@@ -68,14 +66,45 @@ Scene:
           - [6.10000038, -1, 0]
         Matrices:
           []
-    - Entity: 10666672931233083523
+    - Entity: 11714078419489869922
       IsActive: true
       TagComponent:
-        Tag: BSpline
+        Tag: Bezier 4
       TransformComponent:
-        Position: [-1.10222709, 0.209945679, 0]
+        Position: [0, 0.697555184, 0]
         Rotation: [0, 0, 0, 1]
         EulerRotation: [0, -0, 0]
         Scale: [1, 1, 1]
-      BSplinesComponents:
-        {}
+      BezierCurve:
+        Material: 6501812136981279580
+        ControlPoints:
+          - [-1, 0, 0]
+          - [0, 1, 0]
+          - [0, -1, 0]
+          - [1, 0, 0]
+        Definition: 1000
+    - Entity: 6063967340830853876
+      IsActive: true
+      TagComponent:
+        Tag: Castlejau
+      TransformComponent:
+        Position: [-7.30000019, -1.39999998, 0]
+        Rotation: [0, 0, 0, 1]
+        EulerRotation: [0, 0, 0]
+        Scale: [1, 1, 1]
+      GenericBezierCurve:
+        Continuity: Continuity::Acceleration
+        Definition: 1000
+        ControlPoints: 2
+        Material: 1069266738333071017
+        Points:
+          - [-2.5999999, 0, 0]
+          - [0, 1.29999995, 0]
+          - [0, -1.20000005, 0]
+          - [3.00408888, -1.19999993, 0]
+          - [3.00408888, -1.19999993, 0]
+          - [6.00817776, -1.19999981, 0]
+          - [6.00817776, 1.30000019, 0]
+          - [0, -4.30000019, 0]
+        Matrices:
+          []
