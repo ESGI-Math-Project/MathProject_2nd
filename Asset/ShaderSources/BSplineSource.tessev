@@ -141,32 +141,65 @@ float GetKnot(int i)
 
 vec3 GetKnotPosition(int i)
 {
-    return GetControlPoint(gl_in[i/3].gl_Position[i%3]);
+    return GetControlPoint(GetKnot(i));
+}
+
+float GetKnotWeight(int i)
+{
+    return GetWeights(GetKnot(i));
 }
 
 vec3 deBoor(int segment, float t) {
-    vec3 d[100];
-    float w[100];
+    vec3 v[NUM_CONTROL_POINTS_MAX];
+    //float w[NUM_CONTROL_POINTS_MAX];
+
+    int order = u_Degree + 1;
+
+    // t = mix(GetKnot(u_Degree), GetKnot(u_NumberControlPoint - order), t);
+    //
+    // // find s (the spline segment) for the [t] value provided
+    // int segment = u_Degree;
+    // 
+    // while (segment < (u_NumberControlPoint - order))
+    // {
+    //     if(t >= GetKnot(segment) && t <= GetKnot(segment+1))
+    //     {
+    //         break;
+    //     }
+    //     segment += 1;
+    // }
     
     // First level
-    for (int i = 0; i <= u_Degree; i++) {
-        d[i] = GetControlPoint(i + segment - u_Degree);
-        w[i] = GetWeights(i + segment - u_Degree);
+    for (int i = 0; i < u_NumberControlPoint; i++) {
+        v[i] = GetControlPoint(i);
+        //w[i] = GetKnotWeight(i + segment - u_Degree);
     }
     
-    // Rest of the levels
-    for (int r = 1; r <= u_Degree; r++) {
-        for (int j = u_Degree ; j >= r; j--) {
-            float alpha = (t - GetKnot(j + segment - u_Degree)) / (GetKnot(j + 1 + segment - r) - GetKnot(j + segment - u_Degree));
-            //float alpha = (t - GetKnot(j)) / (GetKnot(j + u_Degree + 1 - r) - GetKnot(j));
-            // Adding the weight should transform the BSpline into a NURBS.
-            d[j] = mix(w[j - 1] * d[j - 1], w[j] * d[j], alpha);
-            w[j] = 1;
+    for(int L = 1; L <= order; L++) {
+        for(int i = segment; i > segment + L - order; i--) {
+            float numerator = t - GetKnot(i);
+            float denominator = GetKnot(i - L + order) - GetKnot(i);
+            float alpha = numerator / denominator;
+            v[i] = alpha * v[i] + (1-alpha) * v[i-1];
         }
     }
-    
-    return d[u_Degree]; // Calcul de l'index manuellement
+
+    return v[segment];
 }
+
+// vec3 nurbsInterpolation(float t)
+// {
+//     vec3 position = vec3(0); 
+//     float alpha = 0.0;
+//     for(int i = 0; i < u_NumberOfKnot; i++)
+//     {
+//         float a = GetKnotWeight(i) * deBoor(t);
+//         alpha += a;
+//         position += a * GetKnotWeight(i);
+//     }
+// 
+//     return position / alpha; 
+// }
 
 layout(isolines) in;
 
@@ -178,8 +211,8 @@ void main() {
     //Remap t to the domain where the spline is defined
 
     // int segment = int(v * (u_NumberOfKnot - u_Degree*2));
-    int segment = int(mix(u_Degree, u_NumberOfKnot - u_Degree, v));
-    float t = mix(float(segment - 1), float(segment), u);
+    int segment = int(mix(u_Degree, u_NumberControlPoint, v));
+    float t = mix(GetKnot(segment), GetKnot(segment + 1), u);
 
 	gl_Position = u_ViewProjectionMatrix * vec4(deBoor(segment, t), 1.0);
 }
