@@ -70,6 +70,9 @@ AssetRegistry:
     - Handle: 10574093062912526717
       FilePath: {Source: 1, Path: Shaders\DefaultShader.vert}
       Type: AssetType::ShaderSource
+    - Handle: 12010891747067643693
+      FilePath: {Source: 2, Path: Shaders\Default.vxm_shader}
+      Type: AssetType::Shader
     - Handle: 12478498007980619411
       FilePath: {Source: 2, Path: ShaderSources\BezierPascal.tessev}
       Type: AssetType::ShaderSource
@@ -100,6 +103,9 @@ AssetRegistry:
     - Handle: 16039519178751608459
       FilePath: {Source: 2, Path: Shaders\BezierPascal.vxm_shader}
       Type: AssetType::Shader
+    - Handle: 17573606977976364358
+      FilePath: {Source: 2, Path: Materials\Default.vxm_material}
+      Type: AssetType::Material
     - Handle: 18076994461876039139
       FilePath: {Source: 1, Path: Shaders\DefaultShader.frag}
       Type: AssetType::ShaderSource
