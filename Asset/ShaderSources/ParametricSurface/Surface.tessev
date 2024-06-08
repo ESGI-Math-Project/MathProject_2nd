@@ -96,8 +96,10 @@ layout(std140, binding = 3) uniform MaterialParameters
 
 layout(std140, binding = 4) uniform CurveParameters
 {
-    vec4 u_ControlPoints[NUM_CONTROL_POINTS_MAX];
-    vec4 u_Weights[NUM_CONTROL_POINTS_MAX/4];
+    vec4 u_CurveControlPoints[NUM_CONTROL_POINTS_MAX];
+    vec4 u_CurveWeights[NUM_CONTROL_POINTS_MAX/4];
+    vec4 u_ProfileControlPoints[NUM_CONTROL_POINTS_MAX];
+    vec4 u_ProfileWeights[NUM_CONTROL_POINTS_MAX/4];
     int u_NumberOfSegment;
     int u_NumberControlPoint; // 4 by default.
     int u_Degree; // min should be 1
@@ -115,15 +117,12 @@ void main() {
     float u = gl_TessCoord.x;
     float v = gl_TessCoord.y;
 
-    //TODO: remap t between desired interval (i.e. 0 & 0.5)
-    //Remap t to the domain where the spline is defined
-
-    // int segment = int(v * (u_NumberOfKnot - u_Degree*2));
-    int segment = int(mix(u_Degree, u_NumberControlPoint, v));
-    float t = mix(GetKnot(segment), GetKnot(segment + 1), u);
-
-	gl_Position = u_ViewProjectionMatrix * vec4(deBoor(segment, t), 1.0);
-
+    vec3 point = vec3(0);
+	gl_Position = u_ViewProjectionMatrix * vec4(point, 1.0);
+    v_Position = point;
+    v_Normal = vec3(0,1,0);
     v_EntityId = u_EntityId;
+    v_TexCoord = gl_TessCoord.xy;
+    v_Color = vec4(1,1,1,1);
 }
 
