@@ -1,4 +1,3 @@
-
 #version 450 core
 
 #define ALPHA_MODE_OPAQUE 0
@@ -7,6 +6,7 @@
 
 #define MAX_LIGHT_COUNT 20
 #define EPSILON 0.1
+
 
 // Using 48 as it's "16*3"
 // The first 16 control points are for the initial u factor and the later 16 point are for the v factor.
@@ -48,7 +48,7 @@ struct MaterialParams
     OcclusionTextureInfo OcclusionTexture;
     TextureInfo EmissiveTexture;
     vec4 EmissiveFactor;
-    int AlphaMode; // Opaque = 0, Mask = 1, Blend = 2,
+    int AlphaMode;
     float AlphaCutoff;
     int DoubleSided;
 };
@@ -67,7 +67,6 @@ struct Light
 struct LightData
 {
     Light lights[MAX_LIGHT_COUNT];
-//    Light lights;
     int lightCount;
 };
 
@@ -99,83 +98,18 @@ layout(std140, binding = 4) uniform CurveParameters
 {
     vec4 u_ControlPoints[NUM_CONTROL_POINTS_MAX];
     vec4 u_Weights[NUM_CONTROL_POINTS_MAX/4];
-    vec4 u_ProfileControlPoints[NUM_CONTROL_POINTS_MAX];
-    vec4 u_ProfileWeights[NUM_CONTROL_POINTS_MAX/4];
     int u_NumberOfSegment;
     int u_NumberControlPoint; // 4 by default.
     int u_Degree; // min should be 1
-    int u_NumberOfKnot; // min should be 1
 };
 
-float GetWeight(int i)
-{
-    int a = i/4;
-    int b = i%4;
-    return u_Weights[a][b];
-}
+layout(quads) in;
 
-vec3 GetControlPoint(int i)
-{
-    return u_ControlPoints[i].xyz;
-}
-
-vec3 GetControlPoint(float i)
-{
-    int a = int(floor(i));
-    int b = a+1;
-    return mix(GetControlPoint(a), GetControlPoint(b), fract(i));
-}
-
-float GetWeights(int i)
-{
-    return u_Weights[i/4][i%4];
-}
-
-float GetWeights(float i)
-{
-    int a = int(floor(i));
-    int b = a+1;
-    return mix(GetWeights(a), GetWeights(b), fract(i));
-}
-
-float GetKnot(int i)
-{
-    return gl_in[i/3].gl_Position[i%3];
-}
-
-vec3 GetKnotPosition(int i)
-{
-    return GetControlPoint(GetKnot(i));
-}
-
-float GetKnotWeight(int i)
-{
-    return GetWeights(GetKnot(i));
-}
-
-vec3 deBoor(int segment, float t) {
-    vec4 v[NUM_CONTROL_POINTS_MAX];
-
-    int order = u_Degree + 1;
-    
-    // First level
-    for (int i = 0; i < u_NumberControlPoint; i++) {
-        v[i] = vec4(GetControlPoint(i) * GetWeight(i), GetWeight(i));
-    }
-    
-    for(int level = 1; level <= order; level++) {
-        for(int i = segment; i > segment + level - order; i--) {
-            float numerator = t - GetKnot(i);
-            float denominator = GetKnot(i - level + order) - GetKnot(i);
-            float alpha = numerator / denominator;
-            v[i] = alpha *  v[i] + (1-alpha) * v[i-1];
-        }
-    }
-
-    return v[segment].xyz / v[segment].w;
-}
-
-layout(isolines) in;
+layout (location = 0) out vec3 v_Position;
+layout (location = 1) out vec3 v_Normal;
+layout (location = 2) out vec2 v_TexCoord;
+layout (location = 3) out vec4 v_Color;
+layout (location = 4) out flat int v_EntityId;
 
 void main() {
     float u = gl_TessCoord.x;
@@ -189,5 +123,7 @@ void main() {
     float t = mix(GetKnot(segment), GetKnot(segment + 1), u);
 
 	gl_Position = u_ViewProjectionMatrix * vec4(deBoor(segment, t), 1.0);
+
+    v_EntityId = u_EntityId;
 }
 

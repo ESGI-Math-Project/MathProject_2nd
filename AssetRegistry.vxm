@@ -1,6 +1,9 @@
 Type: AssetRegistry
 AssetRegistry:
   Assets:
+    - Handle: 503149999611088530
+      FilePath: {Source: 2, Path: ShaderSources\ParametricSurface\Surface.tessev}
+      Type: AssetType::ShaderSource
     - Handle: 767692958919381968
       FilePath: {Source: 2, Path: Shaders\BezierDeCasteljau.vxm_shader}
       Type: AssetType::Shader
@@ -22,6 +25,9 @@ AssetRegistry:
     - Handle: 6501812136981279580
       FilePath: {Source: 2, Path: Materials\Bezier4.vxm_material}
       Type: AssetType::Material
+    - Handle: 6956157766563029352
+      FilePath: {Source: 2, Path: ShaderSources\ParametricSurface\Surface.tessco}
+      Type: AssetType::ShaderSource
     - Handle: 7106198063288636744
       FilePath: {Source: 1, Path: Shaders\TextureShader.vert}
       Type: AssetType::ShaderSource
@@ -46,6 +52,9 @@ AssetRegistry:
     - Handle: 8098330176453956795
       FilePath: {Source: 1, Path: Shaders\Bezier4\Bezier4.tessco}
       Type: AssetType::ShaderSource
+    - Handle: 8500526467576582353
+      FilePath: {Source: 2, Path: Shaders\Surface.vxm_shader}
+      Type: AssetType::Shader
     - Handle: 8552950103494062726
       FilePath: {Source: 2, Path: ShaderSources\BezierDeCasteljau.tessev}
       Type: AssetType::ShaderSource

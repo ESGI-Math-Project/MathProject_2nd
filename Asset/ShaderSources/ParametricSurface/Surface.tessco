@@ -95,54 +95,22 @@ layout(std140, binding = 3) uniform MaterialParameters
 
 layout(std140, binding = 4) uniform CurveParameters
 {
-    vec4 u_ControlPoints[NUM_CONTROL_POINTS_MAX];
-    vec4 u_Weights[NUM_CONTROL_POINTS_MAX/4];
+    vec4 u_CurveControlPoints[NUM_CONTROL_POINTS_MAX];
+    vec4 u_CurveWeights[NUM_CONTROL_POINTS_MAX/4];
     vec4 u_ProfileControlPoints[NUM_CONTROL_POINTS_MAX];
     vec4 u_ProfileWeights[NUM_CONTROL_POINTS_MAX/4];
     int u_NumberOfSegment;
     int u_NumberControlPoint; // 4 by default.
     int u_Degree; // min should be 1
-    int u_NumberOfKnot; // min should be 1
 };
 
-float GetWeight(int i)
-{
-    int a = i/4;
-    int b = i%4;
-    return u_Weights[a][b];
-}
-
-vec3 GetControlPoint(int i)
-{
-    i = min(i, NUM_CONTROL_POINTS_MAX);
-    int index = int(gl_in[i/3].gl_Position[i%3]);
-    return u_ControlPoints[index].xyz;
-}
-
-layout(isolines) in;
+layout(vertices = 32) out;
 
 void main() {
-    float u = gl_TessCoord.x;
-    float t = u; // Valeur de t variant de 0 à 1 pour le calcul de la position sur la courbe
+    gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;
 
-    vec3 tmp[NUM_CONTROL_POINTS_MAX];
-    int count = min(NUM_CONTROL_POINTS_MAX, u_NumberControlPoint);
-	
-    for(int i = 0; i < count; i++)
-    {
-        tmp[i] = GetControlPoint(i);
-    } 
+    gl_TessLevelOuter[0] = float(u_NumberOfSegment);
 
-    // Application de l'algorithme de De Casteljau
-    for (int j = 1; j < count; j++) {
-        for (int i = 0; i < count - j; i++) {
-            tmp[i] = (1.0 - t) * tmp[i] + t * tmp[i+1];
-        }
-    }
-
-    // Le premier élément de tempPoints contient maintenant la position sur la courbe pour le t spécifique
-    vec3 p = tmp[0];
-
-    // Calcul de la position finale du point sur la courbe dans l'espace de la caméra
-    gl_Position = u_ViewProjectionMatrix * vec4(p, 1.0);
+    // The number of segment we want to subdivise out line into.
+    gl_TessLevelOuter[1] = float(u_NumberOfSegment);
 }

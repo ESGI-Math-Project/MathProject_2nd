@@ -7,7 +7,9 @@
 #define MAX_LIGHT_COUNT 20
 #define EPSILON 0.1
 
-#define NUM_CONTROL_POINTS_MAX 96
+// Using 48 as it's "16*3"
+// The first 16 control points are for the initial u factor and the later 16 point are for the v factor.
+#define NUM_CONTROL_POINTS_MAX 48
 
 struct TextureInfo
 {
@@ -95,6 +97,8 @@ layout(std140, binding = 4) uniform CurveParameters
 {
     vec4 u_ControlPoints[NUM_CONTROL_POINTS_MAX];
     vec4 u_Weights[NUM_CONTROL_POINTS_MAX/4];
+    vec4 u_ProfileControlPoints[NUM_CONTROL_POINTS_MAX];
+    vec4 u_ProfileWeights[NUM_CONTROL_POINTS_MAX/4];
     int u_NumberOfSegment;
     int u_NumberControlPoint; // 4 by default.
     int u_Degree; // min should be 1
