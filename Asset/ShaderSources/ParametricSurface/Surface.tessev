@@ -132,15 +132,42 @@ vec3 Polygon(bool sampleMainCurve, float t)
     
     float v = u - segment;
 
-    vec3 a = sampleMainCurve ? u_CurveControlPoints[segment] : u_ProfileControlPoints[segment];
-    vec3 b = sampleMainCurve ? u_CurveControlPoints[segment + 1] : u_ProfileControlPoints[segment + 1];
+    vec4 a = sampleMainCurve ? u_CurveControlPoints[segment] : u_ProfileControlPoints[segment];
+    vec4 b = sampleMainCurve ? u_CurveControlPoints[segment + 1] : u_ProfileControlPoints[segment + 1];
 
     return mix(a, b, v).xyz;
+}
+
+float binomialCoeff(int n, int k) {
+    int res = 1;
+    for (int i = 0; i < k; ++i;)
+    {
+        res *= (n - i);
+        res /= (i + 1);
+    }
+     
+    return res;
 }
 
 vec3 Bezier(bool sampleMainCurve, float t, int degree, int numberOfControlPoint)
 {
 
+    vec3 tmp[NUM_CONTROL_POINTS_MAX];
+    int count = min(NUM_CONTROL_POINTS_MAX, sampleMainCurve ? u_ProfileNumberControlPoint : u_CurveNumberControlPoint);
+
+    for(int i = 0; i < count; i++;)
+    {
+        tmp[i] = sampleMainCurve ? u_CurveControlPoints[i] : u_ProfileControlPoints[i].xyz;
+    }
+
+    vec3 finalPos = vec3(0.0);
+    for (int i = 0; i < count; ++i;) {
+        float binom = binomialCoeff(count-1, i);
+        float bernstein = binom * pow(1.0 - t, float(count - 1 - i)) * pow(t, float(i));
+        finalPos += tmp[i] * bernstein;
+    }
+
+    return finalPos;
 }
 
 vec3 SamplePoint(float u, float v)
