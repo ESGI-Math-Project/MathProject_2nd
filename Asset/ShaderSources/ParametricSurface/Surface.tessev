@@ -98,11 +98,20 @@ layout(std140, binding = 4) uniform CurveParameters
 {
     vec4 u_CurveControlPoints[NUM_CONTROL_POINTS_MAX];
     vec4 u_CurveWeights[NUM_CONTROL_POINTS_MAX/4];
+
     vec4 u_ProfileControlPoints[NUM_CONTROL_POINTS_MAX];
     vec4 u_ProfileWeights[NUM_CONTROL_POINTS_MAX/4];
+
     int u_NumberOfSegment;
-    int u_NumberControlPoint; // 4 by default.
-    int u_Degree; // min should be 1
+
+    int u_CurveNumberControlPoint; // 4 by default.
+    int u_CurveDegree; // min should be 1
+
+    int u_ProfileNumberControlPoint; // 4 by default.
+    int u_ProfileDegree; // min should be 1
+
+    int u_MainCurveType; // 0 = Polygon / 1 = Bezier
+    int u_ProfileType; // 0 = Polygon / 1 = Bezier
 };
 
 layout(quads) in;
@@ -113,14 +122,67 @@ layout (location = 2) out vec2 v_TexCoord;
 layout (location = 3) out vec4 v_Color;
 layout (location = 4) out flat int v_EntityId;
 
+
+vec3 Polygon(bool sampleMainCurve, float t)
+{
+    float u = t * (sampleMainCurve ? u_ProfileNumberControlPoint-1 : u_CurveNumberControlPoint-1);
+    
+    int segment = fract(u);
+    if(segment >= u_ProfileNumberControlPoint-1) {segment = u_ProfileNumberControlPoint-2;}
+    
+    float v = u - segment;
+
+    vec3 a = sampleMainCurve ? u_CurveControlPoints[segment] : u_ProfileControlPoints[segment];
+    vec3 b = sampleMainCurve ? u_CurveControlPoints[segment + 1] : u_ProfileControlPoints[segment + 1];
+
+    return mix(a, b, v).xyz;
+}
+
+vec3 Bezier(bool sampleMainCurve, float t, int degree, int numberOfControlPoint)
+{
+
+}
+
+vec3 SamplePoint(float u, float v)
+{
+    // Main Curve
+    vec3 point = vec3(0);
+    if(u_MainCurveType == 0) // Polygon
+    {
+        point = Polygon(true, u);
+    }
+    else if (u_MainCurveType == 1) // Bezier
+    {
+        point = Bezier(true, u, u_CurveDegree, u_CurveNumberControlPoint);
+    }
+
+    // Profile
+    if(u_ProfileType == 0) // Polygon
+    {
+        point += Polygon(false, v);
+    }
+    else if (u_ProfileType == 1) // Bezier
+    {
+        point += Bezier(false, v, u_ProfileDegree, u_ProfileNumberControlPoint);
+    }
+    return point;
+}
+
 void main() {
     float u = gl_TessCoord.x;
     float v = gl_TessCoord.y;
 
-    vec3 point = vec3(0);
+    vec3 point = SamplePoint(u,v);
+    vec3 point1 = SamplePoint(u+0.1,v);
+    vec3 point2 = SamplePoint(u,v+0.1);
+
+    vec3 normal = normalize(cross(normalize(point2 - point), normalize(point1 - point)));
+
+
+
 	gl_Position = u_ViewProjectionMatrix * vec4(point, 1.0);
     v_Position = point;
-    v_Normal = vec3(0,1,0);
+    v_Normal = normal;
     v_EntityId = u_EntityId;
     v_TexCoord = gl_TessCoord.xy;
     v_Color = vec4(1,1,1,1);
