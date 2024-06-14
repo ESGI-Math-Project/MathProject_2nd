@@ -1,38 +1,6 @@
 Scene:
   Name: Parametric Surface
   Entities:
-    - Entity: 11063987318120901838
-      IsActive: true
-      TagComponent:
-        Tag: Surface
-      TransformComponent:
-        Position: [0, 0, 0]
-        Rotation: [0, 0, 0, 1]
-        EulerRotation: [0, 0, 0]
-        Scale: [1, 1, 1]
-      ParametricSurfaceComponent:
-        Material: 10751560127632024311
-        Definition: 100
-        Main Curve:
-          Curve Type: Bezier
-          Weights:
-            []
-          Degree: 2
-          Curve:
-            - [0, 0, 0]
-            - [0, 0.67044884, 1]
-            - [0, -0.732376397, 2]
-            - [0, 0, 3]
-        Profile:
-          Curve Type: Bezier
-          Weights:
-            []
-          Degree: 2
-          Curve:
-            - [0, 0, 0]
-            - [1, 0.596064031, 0]
-            - [2, -0.843456864, 0]
-            - [3, 0, 0]
     - Entity: 10377224416363431574
       IsActive: true
       TagComponent:
@@ -48,3 +16,37 @@ Scene:
         Range: 10
         Cutoff: 45
         LightType: 0
+    - Entity: 11063987318120901838
+      IsActive: true
+      TagComponent:
+        Tag: Surface
+      TransformComponent:
+        Position: [0, 0.189057827, 0.298617601]
+        Rotation: [0, 0, 0, 1]
+        EulerRotation: [0, -0, 0]
+        Scale: [1, 1, 1]
+      ParametricSurfaceComponent:
+        Material: 10751560127632024311
+        Definition: 100
+        Main Curve:
+          Curve Type: Bezier
+          Weights:
+            []
+          Degree: 2
+          Curve:
+            - [0, 0, 0]
+            - [-0.506415546, -0.88044548, 1]
+            - [-0.341092288, -0.502111852, 2]
+            - [-0.597225547, -0.186388552, 3]
+            - [0, 0.357844234, 4]
+        Profile:
+          Curve Type: Bezier
+          Weights:
+            []
+          Degree: 2
+          Curve:
+            - [0, 0, 0]
+            - [1, 0.408241689, 0]
+            - [2, -0.843456864, 0]
+            - [3, 0.306638062, 0]
+            - [4, 1.36854839, 0]

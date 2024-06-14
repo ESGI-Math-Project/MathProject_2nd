@@ -169,38 +169,57 @@ vec3 SamplePoint(float u, float v)
 {
     // Main Curve
     vec3 point = vec3(0);
-    if(u_MainCurveType == 0) // Polygon
+    if(false && int(u_MainCurveType) == int(0)) // Polygon
     {
         point = Polygon(true, u);
     }
-    else if (u_MainCurveType == 1) // Bezier
+    else if (true || int(u_MainCurveType) == int(1)) // Bezier
     {
         point = Bezier(true, u, u_CurveDegree, u_CurveNumberControlPoint);
     }
 
     // Profile
-    if(u_ProfileType == 0) // Polygon
+    if(false && int(u_ProfileType) == int(0)) // Polygon
     {
         point += Polygon(false, v);
     }
-    else if (u_ProfileType == 1) // Bezier
+    else if (true || int(u_ProfileType) == int(1)) // Bezier
     {
         point += Bezier(false, v, u_ProfileDegree, u_ProfileNumberControlPoint);
     }
     return point;
 }
 
+layout (location = 0) in vec3 v_InPosition[];
+layout (location = 1) in vec3 v_InNormal[];
+layout (location = 2) in vec2 v_InTexCoord[];
+layout (location = 3) in vec4 v_InColor[];
+layout (location = 4) in flat int v_InEntityId[];
 
-void main() {
+layout (location = 0) out vec3 v_OutPosition;
+layout (location = 1) out vec3 v_OutNormal;
+layout (location = 2) out vec2 v_OutTexCoord;
+layout (location = 3) out vec4 v_OutColor;
+layout (location = 4) out flat int v_OutEntityId;
+
+void main()
+{
     // get patch coordinate
     float u = gl_TessCoord.x;
     float v = gl_TessCoord.y;
 
-    vec3 point = SamplePoint(u,v);
-
     // displace point along normal
-    vec4 p = vec4(point, 1.0);
+    vec3 point = SamplePoint(u,v);
+    vec3 point1 = SamplePoint(u+0.1,v);
+    vec3 point2 = SamplePoint(u,v+0.1);
 
-    gl_Position = u_ViewProjectionMatrix * p;
+    vec3 normal = normalize(cross(normalize(point1 - point), normalize(point2 - point)));
+
+    gl_Position = u_ViewProjectionMatrix * vec4(point, 1);
+
+    v_OutPosition = point;
+    v_OutNormal = normal;
+    v_OutEntityId = v_InEntityId[0];
+    v_OutTexCoord = gl_TessCoord.xy;
+    v_OutColor = vec4(1);
 }
-

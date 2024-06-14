@@ -13,13 +13,33 @@
 
 layout (vertices = 4) out;
 
+
+layout (location = 0) in vec3 v_InPosition[];
+layout (location = 1) in vec3 v_InNormal[];
+layout (location = 2) in vec2 v_InTexCoord[];
+layout (location = 3) in vec4 v_InColor[];
+layout (location = 4) in flat int v_InEntityId[];
+
+layout (location = 0) out vec3 v_OutPosition[];
+layout (location = 1) out vec3 v_OutNormal[];
+layout (location = 2) out vec2 v_OutTexCoord[];
+layout (location = 3) out vec4 v_OutColor[];
+layout (location = 4) out flat int v_OutEntityId[];
+
 void main() {
     gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;
+
+    v_OutPosition[gl_InvocationID] = v_InPosition[gl_InvocationID]; 
+    v_OutNormal[gl_InvocationID] = v_InNormal[gl_InvocationID]; 
+    v_OutTexCoord[gl_InvocationID] = v_InTexCoord[gl_InvocationID]; 
+    v_OutColor[gl_InvocationID] = v_InColor[gl_InvocationID]; 
+    v_OutEntityId[gl_InvocationID] = v_InEntityId[gl_InvocationID]; 
 
     gl_TessLevelOuter[0] = 32;
     gl_TessLevelOuter[1] = 32;
     gl_TessLevelOuter[2] = 32;
     gl_TessLevelOuter[3] = 32;
+
     gl_TessLevelInner[0] = 32;
     gl_TessLevelInner[1] = 32;
 }
