@@ -1,0 +1,36 @@
+#version 450 core
+
+#define ALPHA_MODE_OPAQUE 0
+#define ALPHA_MODE_MASK 1
+#define ALPHA_MODE_BLEND 2
+
+#define MAX_LIGHT_COUNT 20
+#define EPSILON 0.1
+
+// Using 48 as it's "16*3"
+// The first 16 control points are for the initial u factor and the later 16 point are for the v factor.
+#define NUM_CONTROL_POINTS_MAX 48
+
+layout(std140, binding = 0) uniform Camera
+{
+    mat4 u_ViewProjectionMatrix;
+    vec4 u_CameraPosition;
+    vec4 u_CameraDirection;
+};
+
+// specify number of control points per patch output
+// this value controls the size of the input and output arrays
+layout (quads, equal_spacing, ccw) in;
+
+
+void main() {
+    // get patch coordinate
+    float u = gl_TessCoord.x;
+    float v = gl_TessCoord.y;
+
+    // displace point along normal
+    vec4 p = vec4(u, 0, v, 1.0);
+
+    gl_Position = u_ViewProjectionMatrix * p;
+}
+

@@ -1,6 +1,9 @@
 Type: AssetRegistry
 AssetRegistry:
   Assets:
+    - Handle: 439981118695691544
+      FilePath: {Source: 2, Path: ShaderSources\Tests\TestTessControl.tessco}
+      Type: AssetType::ShaderSource
     - Handle: 503149999611088530
       FilePath: {Source: 2, Path: ShaderSources\ParametricSurface\Surface.tessev}
       Type: AssetType::ShaderSource
@@ -12,6 +15,9 @@ AssetRegistry:
       Type: AssetType::Material
     - Handle: 2175996211825722344
       FilePath: {Source: 1, Path: Shaders\Bezier4\Bezier4.frag}
+      Type: AssetType::ShaderSource
+    - Handle: 2292195918064451725
+      FilePath: {Source: 2, Path: ShaderSources\Tests\TestTessEval.tessev}
       Type: AssetType::ShaderSource
     - Handle: 2387699518809495394
       FilePath: {Source: 2, Path: ShaderSources\Bezier\Bezier.geom}
@@ -55,6 +61,12 @@ AssetRegistry:
     - Handle: 8098330176453956795
       FilePath: {Source: 1, Path: Shaders\Bezier4\Bezier4.tessco}
       Type: AssetType::ShaderSource
+    - Handle: 8181492110301568857
+      FilePath: {Source: 2, Path: ShaderSources\Tests\TestVertex.vert}
+      Type: AssetType::ShaderSource
+    - Handle: 8470114598415543624
+      FilePath: {Source: 2, Path: ShaderSources\Tests\TestFrag.frag}
+      Type: AssetType::ShaderSource
     - Handle: 8500526467576582353
       FilePath: {Source: 2, Path: Shaders\Surface.vxm_shader}
       Type: AssetType::Shader
@@ -73,6 +85,9 @@ AssetRegistry:
     - Handle: 9791039593552689008
       FilePath: {Source: 1, Path: Shaders\TextureShader.frag}
       Type: AssetType::ShaderSource
+    - Handle: 9803202081314827087
+      FilePath: {Source: 2, Path: ShaderSources\Tests\Test.vxm_shader}
+      Type: AssetType::Shader
     - Handle: 9851964826079991738
       FilePath: {Source: 1, Path: Shaders\Bezier4\Bezier4.geom}
       Type: AssetType::ShaderSource
@@ -85,6 +100,9 @@ AssetRegistry:
     - Handle: 10574093062912526717
       FilePath: {Source: 1, Path: Shaders\DefaultShader.vert}
       Type: AssetType::ShaderSource
+    - Handle: 10751560127632024311
+      FilePath: {Source: 2, Path: ShaderSources\Tests\TestMat.vxm_material}
+      Type: AssetType::Material
     - Handle: 12010891747067643693
       FilePath: {Source: 2, Path: Shaders\Default.vxm_shader}
       Type: AssetType::Shader
