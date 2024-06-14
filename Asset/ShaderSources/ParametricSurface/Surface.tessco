@@ -97,11 +97,20 @@ layout(std140, binding = 4) uniform CurveParameters
 {
     vec4 u_CurveControlPoints[NUM_CONTROL_POINTS_MAX];
     vec4 u_CurveWeights[NUM_CONTROL_POINTS_MAX/4];
+
     vec4 u_ProfileControlPoints[NUM_CONTROL_POINTS_MAX];
     vec4 u_ProfileWeights[NUM_CONTROL_POINTS_MAX/4];
+
     int u_NumberOfSegment;
-    int u_NumberControlPoint; // 4 by default.
-    int u_Degree; // min should be 1
+
+    int u_CurveNumberControlPoint; // 4 by default.
+    int u_CurveDegree; // min should be 1
+
+    int u_ProfileNumberControlPoint; // 4 by default.
+    int u_ProfileDegree; // min should be 1
+
+    int u_MainCurveType; // 0 = Polygon / 1 = Bezier
+    int u_ProfileType; // 0 = Polygon / 1 = Bezier
 };
 
 layout(vertices = 32) out;

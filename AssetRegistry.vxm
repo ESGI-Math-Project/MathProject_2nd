@@ -16,6 +16,9 @@ AssetRegistry:
     - Handle: 2387699518809495394
       FilePath: {Source: 2, Path: ShaderSources\Bezier\Bezier.geom}
       Type: AssetType::ShaderSource
+    - Handle: 3684815087360058331
+      FilePath: {Source: 2, Path: Materials\ParametricSurface.vxm_material}
+      Type: AssetType::Material
     - Handle: 4402394489927246260
       FilePath: {Source: 1, Path: Images\Play.png}
       Type: AssetType::Texture2D
@@ -64,6 +67,9 @@ AssetRegistry:
     - Handle: 9558432145620706893
       FilePath: {Source: 2, Path: ShaderSources\Bezier\Bezier.tessev}
       Type: AssetType::ShaderSource
+    - Handle: 9692555054491125747
+      FilePath: {Source: 2, Path: ShaderSources\ParametricSurface\TestParametric.tessev}
+      Type: AssetType::ShaderSource
     - Handle: 9791039593552689008
       FilePath: {Source: 1, Path: Shaders\TextureShader.frag}
       Type: AssetType::ShaderSource
@@ -100,6 +106,9 @@ AssetRegistry:
     - Handle: 14501197852061985280
       FilePath: {Source: 1, Path: Shaders\Bezier4\Bezier4.vert}
       Type: AssetType::ShaderSource
+    - Handle: 14822625974809595917
+      FilePath: {Source: 2, Path: Scenes\ParametricSurface.vxm_scn}
+      Type: AssetType::Scene
     - Handle: 14844836266454144155
       FilePath: {Source: 2, Path: ShaderSources\BSplineSource.tessco}
       Type: AssetType::ShaderSource

@@ -1,17 +1,46 @@
 Scene:
   Name: BezierScene
   Entities:
-    - Entity: 10450418573665555879
+    - Entity: 11714078419489869922
       IsActive: true
       TagComponent:
-        Tag: Surface
+        Tag: Bezier 4
       TransformComponent:
-        Position: [0, 0, 0]
+        Position: [-0.0643565655, -3.32085204, 0]
         Rotation: [0, 0, 0, 1]
-        EulerRotation: [0, 0, 0]
+        EulerRotation: [0, -0, 0]
         Scale: [1, 1, 1]
-      ParametricSurfaceComponent:
-        {}
+    - Entity: 12906212369099646248
+      IsActive: true
+      TagComponent:
+        Tag: Pascal
+      TransformComponent:
+        Position: [16.2000008, -1.50033009, 0]
+        Rotation: [0, 0, 0, 1]
+        EulerRotation: [0, -0, 0]
+        Scale: [1, 1, 1]
+      GenericBezierCurve:
+        Continuity: Continuity::Acceleration
+        Definition: 1000
+        ControlPoints: 5
+        Material: 14132953702282159457
+        Points:
+          - [-2.0999999, 0, 0]
+          - [-0.699999988, 1, 0]
+          - [1.27341485, -1.3463887, 6.06053727e-05]
+          - [2.70000005, 0, 0]
+          - [2.70000005, 0, 0]
+          - [4.10000038, 1.70000005, 0]
+          - [5.99555397, 2.29021335, -2.91164906e-06]
+          - [5.99555397, 2.29021335, -2.91164906e-06]
+          - [7.89110756, 2.88042665, -5.82329812e-06]
+          - [6.49110699, 1.1804266, -5.82329812e-06]
+          - [7.90454674, -0.0961631536, 0]
+          - [10.559803, 3.52823734, -6.1675637e-05]
+          - [10.7983532, -1.43820035, 0]
+          - [14.6067123, 2.22092772, -6.12757722e-05]
+        Matrices:
+          []
     - Entity: 10666672931233083523
       IsActive: true
       TagComponent:
@@ -60,46 +89,6 @@ Scene:
           - 5
         Matrices:
           []
-    - Entity: 12906212369099646248
-      IsActive: true
-      TagComponent:
-        Tag: Pascal
-      TransformComponent:
-        Position: [16.2000008, -1.50033009, 0]
-        Rotation: [0, 0, 0, 1]
-        EulerRotation: [0, -0, 0]
-        Scale: [1, 1, 1]
-      GenericBezierCurve:
-        Continuity: Continuity::Acceleration
-        Definition: 1000
-        ControlPoints: 5
-        Material: 14132953702282159457
-        Points:
-          - [-2.0999999, 0, 0]
-          - [-0.699999988, 1, 0]
-          - [1.27341485, -1.3463887, 6.06053727e-05]
-          - [2.70000005, 0, 0]
-          - [2.70000005, 0, 0]
-          - [4.10000038, 1.70000005, 0]
-          - [5.99555397, 2.29021335, -2.91164906e-06]
-          - [5.99555397, 2.29021335, -2.91164906e-06]
-          - [7.89110756, 2.88042665, -5.82329812e-06]
-          - [6.49110699, 1.1804266, -5.82329812e-06]
-          - [7.90454674, -0.0961631536, 0]
-          - [10.559803, 3.52823734, -6.1675637e-05]
-          - [10.7983532, -1.43820035, 0]
-          - [14.6067123, 2.22092772, -6.12757722e-05]
-        Matrices:
-          []
-    - Entity: 11714078419489869922
-      IsActive: true
-      TagComponent:
-        Tag: Bezier 4
-      TransformComponent:
-        Position: [-0.0643565655, -3.32085204, 0]
-        Rotation: [0, 0, 0, 1]
-        EulerRotation: [0, -0, 0]
-        Scale: [1, 1, 1]
     - Entity: 6063967340830853876
       IsActive: true
       TagComponent:

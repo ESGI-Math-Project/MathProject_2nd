@@ -1,3 +1,4 @@
+
 #version 450 core
 
 #define ALPHA_MODE_OPAQUE 0
@@ -7,10 +8,10 @@
 #define MAX_LIGHT_COUNT 20
 #define EPSILON 0.1
 
-
 // Using 48 as it's "16*3"
 // The first 16 control points are for the initial u factor and the later 16 point are for the v factor.
 #define NUM_CONTROL_POINTS_MAX 48
+
 
 struct TextureInfo
 {
@@ -48,7 +49,7 @@ struct MaterialParams
     OcclusionTextureInfo OcclusionTexture;
     TextureInfo EmissiveTexture;
     vec4 EmissiveFactor;
-    int AlphaMode;
+    int AlphaMode; // Opaque = 0, Mask = 1, Blend = 2,
     float AlphaCutoff;
     int DoubleSided;
 };
@@ -67,6 +68,7 @@ struct Light
 struct LightData
 {
     Light lights[MAX_LIGHT_COUNT];
+//    Light lights;
     int lightCount;
 };
 
@@ -114,6 +116,7 @@ layout(std140, binding = 4) uniform CurveParameters
     int u_ProfileType; // 0 = Polygon / 1 = Bezier
 };
 
+
 layout(quads, equal_spacing, ccw) in;
 
 layout (location = 0) out vec3 v_Position;
@@ -122,96 +125,20 @@ layout (location = 2) out vec2 v_TexCoord;
 layout (location = 3) out vec4 v_Color;
 layout (location = 4) out flat int v_EntityId;
 
-
-vec3 Polygon(bool sampleMainCurve, float t)
-{
-    float u = t * (sampleMainCurve ? u_ProfileNumberControlPoint-1 : u_CurveNumberControlPoint-1);
-    
-    int segment = int(u);
-    if(segment >= u_ProfileNumberControlPoint-1) {segment = u_ProfileNumberControlPoint-2;}
-    
-    float v = u - float(segment);
-
-    vec4 a = sampleMainCurve ? u_CurveControlPoints[segment] : u_ProfileControlPoints[segment];
-    vec4 b = sampleMainCurve ? u_CurveControlPoints[segment + 1] : u_ProfileControlPoints[segment + 1];
-
-    return mix(a, b, v).xyz;
-}
-
-float binomialCoeff(int n, int k) {
-    int res = 1;
-    for (int i = 0; i < k; ++i)
-    {
-        res *= (n - i);
-        res /= (i + 1);
-    }
-     
-    return res;
-}
-
-vec3 Bezier(bool sampleMainCurve, float t, int degree, int numberOfControlPoint)
-{
-
-    vec3 tmp[NUM_CONTROL_POINTS_MAX];
-    int count = min(NUM_CONTROL_POINTS_MAX, sampleMainCurve ? u_ProfileNumberControlPoint : u_CurveNumberControlPoint);
-
-    for(int i = 0; i < count; i++)
-    {
-        tmp[i] = sampleMainCurve ? u_CurveControlPoints[i].xyz : u_ProfileControlPoints[i].xyz;
-    }
-
-    vec3 finalPos = vec3(0.0);
-    for (int i = 0; i < count; ++i) {
-        float binom = binomialCoeff(count-1, i);
-        float bernstein = binom * pow(1.0 - t, float(count - 1 - i)) * pow(t, float(i));
-        finalPos += tmp[i] * bernstein;
-    }
-
-    return finalPos;
-}
-
-vec3 SamplePoint(float u, float v)
-{
-    // Main Curve
-    vec3 point = vec3(0);
-    if(u_MainCurveType == 0) // Polygon
-    {
-        point = Polygon(true, u);
-    }
-    else if (u_MainCurveType == 1) // Bezier
-    {
-        point = Bezier(true, u, u_CurveDegree, u_CurveNumberControlPoint);
-    }
-
-    // Profile
-    if(u_ProfileType == 0) // Polygon
-    {
-        point += Polygon(false, v);
-    }
-    else if (u_ProfileType == 1) // Bezier
-    {
-        point += Bezier(false, v, u_ProfileDegree, u_ProfileNumberControlPoint);
-    }
-    return point;
-}
-
 void main() {
     float u = gl_TessCoord.x;
     float v = gl_TessCoord.y;
 
-    vec3 point = SamplePoint(u,v);
-    vec3 point1 = SamplePoint(u+0.1,v);
-    vec3 point2 = SamplePoint(u,v+0.1);
-
-    vec3 normal = normalize(cross(normalize(point2 - point), normalize(point1 - point)));
-
-
+    vec3 point = vec3(u,0,v);
+    vec3 normal = vec3(0,1,0);
+    vec2 uvs = vec2(u,v);
 
 	gl_Position = u_ViewProjectionMatrix * vec4(point, 1.0);
+
     v_Position = point;
     v_Normal = normal;
     v_EntityId = u_EntityId;
-    v_TexCoord = gl_TessCoord.xy;
+    v_TexCoord = uvs;
     v_Color = vec4(1,1,1,1);
 }
 
