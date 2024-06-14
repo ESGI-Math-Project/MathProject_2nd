@@ -11,6 +11,64 @@
 // The first 16 control points are for the initial u factor and the later 16 point are for the v factor.
 #define NUM_CONTROL_POINTS_MAX 48
 
+struct TextureInfo
+{
+    int Index;
+    int TexCoord;
+};
+
+struct NormalTextureInfo
+{
+    int Index;
+    int TexCoord;
+    float Scale;
+};
+
+struct OcclusionTextureInfo
+{
+    int Index;
+    int TexCoord;
+    float Strenght;
+};
+
+struct MetallicRoughtness
+{
+    vec4 BaseColorFactor;
+    TextureInfo BaseColorTexture;
+    float MetallicFactor;
+    float RoughtnessFactor;
+    TextureInfo MetallicRoughnessTexture;
+};
+
+struct MaterialParams
+{
+    MetallicRoughtness PbrMetallicRoughness;
+    NormalTextureInfo NormalTexture;
+    OcclusionTextureInfo OcclusionTexture;
+    TextureInfo EmissiveTexture;
+    vec4 EmissiveFactor;
+    int AlphaMode;
+    float AlphaCutoff;
+    int DoubleSided;
+};
+
+struct Light
+{
+    vec4 Color;
+    vec4 Position;
+    vec4 Direction;
+    float Range;
+    float Intensity;
+    float Cutoff;
+    int Type; //0 = Directional ; 1 = Point ; 2 = Spot
+};
+
+struct LightData
+{
+    Light lights[MAX_LIGHT_COUNT];
+    int lightCount;
+};
+
 layout(std140, binding = 0) uniform Camera
 {
     mat4 u_ViewProjectionMatrix;
@@ -18,9 +76,119 @@ layout(std140, binding = 0) uniform Camera
     vec4 u_CameraDirection;
 };
 
+layout(std140, binding = 1) uniform Model
+{
+    mat4 u_ModelMatrix;
+    mat4 u_NormalMatrix;
+    int u_EntityId;
+};
+
+layout(std140, binding = 2) uniform Lights
+{
+    LightData lights;
+};
+
+layout(std140, binding = 3) uniform MaterialParameters
+{
+    MaterialParams materialParameters;
+};
+
+layout(std140, binding = 4) uniform CurveParameters
+{
+    vec4 u_CurveControlPoints[NUM_CONTROL_POINTS_MAX];
+    vec4 u_CurveWeights[NUM_CONTROL_POINTS_MAX/4];
+
+    vec4 u_ProfileControlPoints[NUM_CONTROL_POINTS_MAX];
+    vec4 u_ProfileWeights[NUM_CONTROL_POINTS_MAX/4];
+
+    int u_NumberOfSegment;
+
+    int u_CurveNumberControlPoint; // 4 by default.
+    int u_CurveDegree; // min should be 1
+
+    int u_ProfileNumberControlPoint; // 4 by default.
+    int u_ProfileDegree; // min should be 1
+
+    int u_MainCurveType; // 0 = Polygon / 1 = Bezier
+    int u_ProfileType; // 0 = Polygon / 1 = Bezier
+};
+
 // specify number of control points per patch output
 // this value controls the size of the input and output arrays
 layout (quads, equal_spacing, ccw) in;
+
+
+vec3 Polygon(bool sampleMainCurve, float t)
+{
+    float u = t * (sampleMainCurve ? u_ProfileNumberControlPoint-1 : u_CurveNumberControlPoint-1);
+    
+    int segment = int(u);
+    if(segment >= u_ProfileNumberControlPoint-1) {segment = u_ProfileNumberControlPoint-2;}
+    
+    float v = u - float(segment);
+
+    vec4 a = sampleMainCurve ? u_CurveControlPoints[segment] : u_ProfileControlPoints[segment];
+    vec4 b = sampleMainCurve ? u_CurveControlPoints[segment + 1] : u_ProfileControlPoints[segment + 1];
+
+    return mix(a, b, v).xyz;
+}
+
+float binomialCoeff(int n, int k) {
+    int res = 1;
+    for (int i = 0; i < k; ++i)
+    {
+        res *= (n - i);
+        res /= (i + 1);
+    }
+     
+    return res;
+}
+
+vec3 Bezier(bool sampleMainCurve, float t, int degree, int numberOfControlPoint)
+{
+
+    vec3 tmp[NUM_CONTROL_POINTS_MAX];
+    int count = min(NUM_CONTROL_POINTS_MAX, sampleMainCurve ? u_ProfileNumberControlPoint : u_CurveNumberControlPoint);
+
+    for(int i = 0; i < count; i++)
+    {
+        tmp[i] = sampleMainCurve ? u_CurveControlPoints[i].xyz : u_ProfileControlPoints[i].xyz;
+    }
+
+    vec3 finalPos = vec3(0.0);
+    for (int i = 0; i < count; ++i) {
+        float binom = binomialCoeff(count-1, i);
+        float bernstein = binom * pow(1.0 - t, float(count - 1 - i)) * pow(t, float(i));
+        finalPos += tmp[i] * bernstein;
+    }
+
+    return finalPos;
+}
+
+vec3 SamplePoint(float u, float v)
+{
+    // Main Curve
+    vec3 point = vec3(0);
+    if(u_MainCurveType == 0) // Polygon
+    {
+        point = Polygon(true, u);
+    }
+    else if (u_MainCurveType == 1) // Bezier
+    {
+        point = Bezier(true, u, u_CurveDegree, u_CurveNumberControlPoint);
+    }
+
+    // Profile
+    if(u_ProfileType == 0) // Polygon
+    {
+        point += Polygon(false, v);
+    }
+    else if (u_ProfileType == 1) // Bezier
+    {
+        point += Bezier(false, v, u_ProfileDegree, u_ProfileNumberControlPoint);
+    }
+    return point;
+}
 
 
 void main() {
@@ -28,8 +196,10 @@ void main() {
     float u = gl_TessCoord.x;
     float v = gl_TessCoord.y;
 
+    vec3 point = SamplePoint(u,v);
+
     // displace point along normal
-    vec4 p = vec4(u, 0, v, 1.0);
+    vec4 p = vec4(point, 1.0);
 
     gl_Position = u_ViewProjectionMatrix * p;
 }
