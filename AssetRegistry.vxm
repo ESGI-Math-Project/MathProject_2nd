@@ -31,6 +31,9 @@ AssetRegistry:
     - Handle: 5198630536478053218
       FilePath: {Source: 1, Path: Shaders\FlatColor.frag}
       Type: AssetType::ShaderSource
+    - Handle: 6329807649045684713
+      FilePath: {Source: 2, Path: Texture\UVChecker.png}
+      Type: AssetType::Texture2D
     - Handle: 6501812136981279580
       FilePath: {Source: 2, Path: Materials\Bezier4.vxm_material}
       Type: AssetType::Material
@@ -82,6 +85,9 @@ AssetRegistry:
     - Handle: 9692555054491125747
       FilePath: {Source: 2, Path: ShaderSources\ParametricSurface\TestParametric.tessev}
       Type: AssetType::ShaderSource
+    - Handle: 9753023015722076220
+      FilePath: {Source: 1, Path: Images\FileSystem\file-256.png}
+      Type: AssetType::Texture2D
     - Handle: 9791039593552689008
       FilePath: {Source: 1, Path: Shaders\TextureShader.frag}
       Type: AssetType::ShaderSource

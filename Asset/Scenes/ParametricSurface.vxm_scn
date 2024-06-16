@@ -1,27 +1,27 @@
 Scene:
   Name: Parametric Surface
   Entities:
-    - Entity: 10377224416363431574
+    - Entity: 3080007584441891099
       IsActive: true
       TagComponent:
-        Tag: Directional Light
+        Tag: Light - 0
       TransformComponent:
-        Position: [0, 0, 0]
-        Rotation: [-0.353553414, 0.353553414, 0.14644663, 0.853553355]
-        EulerRotation: [-45, 45, 0]
+        Position: [1.80854392, 1.08973312, 1.58598661]
+        Rotation: [0, 0, 0, 1]
+        EulerRotation: [0, -0, 0]
         Scale: [1, 1, 1]
       LightComponent:
-        Color: [1, 1, 1, 1]
+        Color: [0.0850839168, 0.573373377, 0.793103456, 1]
         Intensity: 1
-        Range: 10
+        Range: 1.39999998
         Cutoff: 45
-        LightType: 0
+        LightType: 1
     - Entity: 11063987318120901838
       IsActive: true
       TagComponent:
         Tag: Surface
       TransformComponent:
-        Position: [0, 0.189057827, 0.298617601]
+        Position: [-0.0649796128, 0.149641037, 0.953129768]
         Rotation: [0, 0, 0, 1]
         EulerRotation: [0, -0, 0]
         Scale: [1, 1, 1]
@@ -32,21 +32,38 @@ Scene:
           Curve Type: Bezier
           Weights:
             []
-          Degree: 2
+          Degree: 1
           Curve:
             - [0, 0, 0]
-            - [-0.506415546, -0.88044548, 1]
-            - [-0.341092288, -0.502111852, 2]
-            - [-0.597225547, -0.186388552, 3]
-            - [0, 0.357844234, 4]
+            - [0, -3.3654511, 4]
+            - [0, -0.664451361, 7.00000048]
+            - [0, -4.15359831, 10]
         Profile:
           Curve Type: Bezier
           Weights:
             []
-          Degree: 2
+          Degree: 1
           Curve:
             - [0, 0, 0]
-            - [1, 0.408241689, 0]
-            - [2, -0.843456864, 0]
-            - [3, 0.306638062, 0]
-            - [4, 1.36854839, 0]
+            - [0.320012987, 2.29409933, 0.21189177]
+            - [2.69522548, 1.73932958, 0.676673412]
+            - [4.37596369, 0.0083605051, 0.639668226]
+            - [2.90730333, -1.24268115, -1.12993455]
+            - [1.8575809, -2.29162359, 5.96046448e-08]
+            - [0.07060045, -2.24396944, 5.96046448e-08]
+            - [0, 0, 0]
+    - Entity: 10377224416363431574
+      IsActive: true
+      TagComponent:
+        Tag: Directional Light
+      TransformComponent:
+        Position: [-1.24645793, 2.59655452, 1.51746261]
+        Rotation: [-0.419346631, -0.301809281, -0.15014784, 0.842920661]
+        EulerRotation: [-52.8999901, -39.4000015, -2.2097488e-06]
+        Scale: [1, 1, 0.999999821]
+      LightComponent:
+        Color: [0.641226649, 0.800766289, 0.641226649, 1]
+        Intensity: 1
+        Range: 10
+        Cutoff: 45
+        LightType: 0

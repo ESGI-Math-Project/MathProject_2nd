@@ -5,7 +5,7 @@
 #define ALPHA_MODE_BLEND 2
 
 #define MAX_LIGHT_COUNT 20
-#define EPSILON 0.1
+#define EPSILON 0.005
 
 // Using 48 as it's "16*3"
 // The first 16 control points are for the initial u factor and the later 16 point are for the v factor.
@@ -111,6 +111,8 @@ layout(std140, binding = 4) uniform CurveParameters
 
     int u_MainCurveType; // 0 = Polygon / 1 = Bezier
     int u_ProfileType; // 0 = Polygon / 1 = Bezier
+
+    int u_NumberOfKnot;
 };
 
 // specify number of control points per patch output
@@ -120,7 +122,7 @@ layout (quads, equal_spacing, ccw) in;
 
 vec3 Polygon(bool sampleMainCurve, float t)
 {
-    float u = t * (sampleMainCurve ? u_ProfileNumberControlPoint-1 : u_CurveNumberControlPoint-1);
+    float u = t * (sampleMainCurve ? u_CurveNumberControlPoint-1 : u_ProfileNumberControlPoint-1);
     
     int segment = int(u);
     if(segment >= u_ProfileNumberControlPoint-1) {segment = u_ProfileNumberControlPoint-2;}
@@ -148,7 +150,7 @@ vec3 Bezier(bool sampleMainCurve, float t, int degree, int numberOfControlPoint)
 {
 
     vec3 tmp[NUM_CONTROL_POINTS_MAX];
-    int count = min(NUM_CONTROL_POINTS_MAX, sampleMainCurve ? u_ProfileNumberControlPoint : u_CurveNumberControlPoint);
+    int count = min(NUM_CONTROL_POINTS_MAX, numberOfControlPoint);
 
     for(int i = 0; i < count; i++)
     {
@@ -169,21 +171,21 @@ vec3 SamplePoint(float u, float v)
 {
     // Main Curve
     vec3 point = vec3(0);
-    if(false && int(u_MainCurveType) == int(0)) // Polygon
+    if(u_MainCurveType == int(0)) // Polygon
     {
         point = Polygon(true, u);
     }
-    else if (true || int(u_MainCurveType) == int(1)) // Bezier
+    else if (u_MainCurveType == int(1)) // Bezier
     {
         point = Bezier(true, u, u_CurveDegree, u_CurveNumberControlPoint);
     }
 
     // Profile
-    if(false && int(u_ProfileType) == int(0)) // Polygon
+    if(u_ProfileType == int(0)) // Polygon
     {
         point += Polygon(false, v);
     }
-    else if (true || int(u_ProfileType) == int(1)) // Bezier
+    else if (u_ProfileType == int(1)) // Bezier
     {
         point += Bezier(false, v, u_ProfileDegree, u_ProfileNumberControlPoint);
     }
@@ -210,10 +212,31 @@ void main()
 
     // displace point along normal
     vec3 point = SamplePoint(u,v);
-    vec3 point1 = SamplePoint(u+0.1,v);
-    vec3 point2 = SamplePoint(u,v+0.1);
+    vec3 point1;
+    vec3 point2;
+    vec3 normal;
 
-    vec3 normal = normalize(cross(normalize(point1 - point), normalize(point2 - point)));
+    if(u + EPSILON > 1) {
+        if (v + EPSILON > 1) {
+            point1 = SamplePoint(u - EPSILON, v);
+            point2 = SamplePoint(u, v - EPSILON);
+            normal = normalize(cross(-normalize(point1 - point), -normalize(point2 - point)));
+        } else {
+            point1 = SamplePoint(u - EPSILON, v);
+            point2 = SamplePoint(u, v + EPSILON);
+            normal = normalize(cross(-normalize(point1 - point), normalize(point2 - point)));
+        }
+    } else {
+        if (v + EPSILON > 1) {
+            point1 = SamplePoint(u + EPSILON, v);
+            point2 = SamplePoint(u, v - EPSILON);
+            normal = normalize(cross(normalize(point1 - point), -normalize(point2 - point)));
+        } else {
+            point1 = SamplePoint(u + EPSILON, v);
+            point2 = SamplePoint(u, v + EPSILON);
+            normal = normalize(cross(normalize(point1 - point), normalize(point2 - point)));
+        }
+    }
 
     gl_Position = u_ViewProjectionMatrix * vec4(point, 1);
 

@@ -2,7 +2,7 @@ Material:
   MaterialName: TestMat
   Shader: 9803202081314827087
   Textures:
-    - 0
+    - 6329807649045684713
     - 0
     - 0
     - 0
@@ -38,8 +38,8 @@ Material:
     AlphaMode: 0
     AlphaCutoff: 0.5
     DoubleSided: 0
-    BaseColor: [0.884169877, 0.163861603, 0.163861603, 1]
-    BaseColorIndex: -1
+    BaseColor: [0.926640928, 0.844352305, 0.844352305, 1]
+    BaseColorIndex: 0
     BaseColorTexCoord: 0
     MetallicFactor: 1
     RoughnessFactor: 1

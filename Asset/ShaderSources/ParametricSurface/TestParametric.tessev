@@ -114,6 +114,8 @@ layout(std140, binding = 4) uniform CurveParameters
 
     int u_MainCurveType; // 0 = Polygon / 1 = Bezier
     int u_ProfileType; // 0 = Polygon / 1 = Bezier
+
+    int u_NumberOfKnot;
 };
 
 
