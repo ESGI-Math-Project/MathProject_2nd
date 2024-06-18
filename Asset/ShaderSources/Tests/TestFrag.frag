@@ -205,9 +205,10 @@ vec4 SampleTexture(int texIndex)
 
 void main()
 {
-    // o_Color = vec4((v_Normal + 1) * 0.5, 1);
+    //o_Color = vec4((v_Normal + 1) * 0.5, 1);
     // o_Color = vec4(v_Position, 1);
     // o_Color = vec4(v_Normal, 1);
+    
     o_Color = materialParameters.PbrMetallicRoughness.BaseColorFactor;
 
     if(materialParameters.PbrMetallicRoughness.BaseColorTexture.Index > -1)
@@ -221,6 +222,7 @@ void main()
 
     // if(float(materialParameters.AlphaMode) == float(ALPHA_MODE_MASK) && o_Color.a <= materialParameters.AlphaCutoff) discard;
 
+    
     vec3 result = vec3(0.0);
 
     for(int i = 0; i < int(lights.lightCount); i++)
@@ -241,7 +243,10 @@ void main()
         }
     }
 
+
 //    float alpha = materialParameters.AlphaMode == int(2) ? o_Color.a : 1.0f;
-    o_Color *= vec4(result, 1);
+    //o_Color *= vec4(result, 1);
+    
+    
     o_Entity = v_EntityId;
 }

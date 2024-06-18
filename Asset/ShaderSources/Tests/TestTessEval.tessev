@@ -10,6 +10,7 @@
 // Using 48 as it's "16*3"
 // The first 16 control points are for the initial u factor and the later 16 point are for the v factor.
 #define NUM_CONTROL_POINTS_MAX 48
+#define M_PI 3.1415926535897932384626433832795
 
 struct TextureInfo
 {
@@ -113,6 +114,7 @@ layout(std140, binding = 4) uniform CurveParameters
     int u_ProfileType; // 0 = Polygon / 1 = Bezier
 
     int u_NumberOfKnot;
+    int u_SampleAsRevolution; // 0 = false ; 1 = true
 };
 
 // specify number of control points per patch output
@@ -135,7 +137,8 @@ vec3 Polygon(bool sampleMainCurve, float t)
     return mix(a, b, v).xyz;
 }
 
-float binomialCoeff(int n, int k) {
+float binomialCoeff(int n, int k)
+{
     int res = 1;
     for (int i = 0; i < k; ++i)
     {
@@ -167,7 +170,37 @@ vec3 Bezier(bool sampleMainCurve, float t, int degree, int numberOfControlPoint)
     return finalPos;
 }
 
-vec3 SamplePoint(float u, float v)
+vec3 Rotate(vec3 vec, float t)
+{
+    float angleRadians = t * (2 * M_PI);
+    float cosTheta = cos(angleRadians);
+    float sinTheta = sin(angleRadians);
+
+    mat3 rotationMatrix = mat3(
+        cosTheta, -sinTheta, 0.0,
+        sinTheta, cosTheta, 0.0,
+        0.0, 0.0, 1.0
+    );
+
+    return rotationMatrix * vec;
+}
+
+vec3 SampleProfile(float v)
+{
+    // Profile
+    vec3 profile = vec3(0);
+    if(u_ProfileType == int(0)) // Polygon
+    {
+        profile = Polygon(false, v);
+    }
+    else if (u_ProfileType == int(1)) // Bezier
+    {
+        profile = Bezier(false, v, u_ProfileDegree, u_ProfileNumberControlPoint);
+    }
+    return profile;
+}
+
+vec3 SampleMainCurve(float u)
 {
     // Main Curve
     vec3 point = vec3(0);
@@ -179,17 +212,57 @@ vec3 SamplePoint(float u, float v)
     {
         point = Bezier(true, u, u_CurveDegree, u_CurveNumberControlPoint);
     }
-
-    // Profile
-    if(u_ProfileType == int(0)) // Polygon
-    {
-        point += Polygon(false, v);
-    }
-    else if (u_ProfileType == int(1)) // Bezier
-    {
-        point += Bezier(false, v, u_ProfileDegree, u_ProfileNumberControlPoint);
-    }
     return point;
+}
+
+mat4 Rotateur(vec3 f, vec3 r, vec3 u, vec3 p)
+{
+    mat4 result;
+    result[0] = vec4(r.x, r.y, r.z, 0);
+    result[1] = vec4(u.x, u.y, u.z, 0);
+    result[2] = vec4(f.x, f.y, f.z, 0);
+    result[3] = vec4(p.x, p.y, p.z, 1);
+    return result;
+}
+
+vec3 SamplePoint(float u, float v)
+{
+    if(u_SampleAsRevolution != 0)
+    {
+        vec3 point = SampleMainCurve(u);
+        vec3 profile = SampleProfile(u);
+        vec3 height = vec3(0,profile.y,0);
+        
+        vec3 displacement = Rotate(height, v);
+
+        vec3 f = vec3(0);
+        if(u + EPSILON > 1)
+        {
+            f = normalize(point - SampleMainCurve(u - EPSILON));
+        }
+        else
+        {
+            f = normalize(SampleMainCurve(u + EPSILON) - point);
+        }
+
+        vec3 r = vec3(-f.z, f.x, -f.y);
+
+        vec3 u = normalize(cross(r, f));
+        r = normalize(cross(u, f));
+        mat4 rota = Rotateur(f, r, u, point);
+        
+        vec4 res = rota * vec4(displacement, 1);
+        res /= res.w;
+
+        return point + res.xyz;
+    }
+    else
+    {
+        vec3 point = SampleMainCurve(u);
+        vec3 profile = SampleProfile(v);
+        return point + profile;
+    }
+
 }
 
 layout (location = 0) in vec3 v_InPosition[];
@@ -216,22 +289,29 @@ void main()
     vec3 point2;
     vec3 normal;
 
-    if(u + EPSILON > 1) {
-        if (v + EPSILON > 1) {
+    if(u + EPSILON > 1)
+    {
+        if (v + EPSILON > 1)
+        {
             point1 = SamplePoint(u - EPSILON, v);
             point2 = SamplePoint(u, v - EPSILON);
             normal = normalize(cross(-normalize(point1 - point), -normalize(point2 - point)));
-        } else {
+        }
+        else
+        {
             point1 = SamplePoint(u - EPSILON, v);
             point2 = SamplePoint(u, v + EPSILON);
             normal = normalize(cross(-normalize(point1 - point), normalize(point2 - point)));
         }
     } else {
-        if (v + EPSILON > 1) {
+        if (v + EPSILON > 1)
+        {
             point1 = SamplePoint(u + EPSILON, v);
             point2 = SamplePoint(u, v - EPSILON);
             normal = normalize(cross(normalize(point1 - point), -normalize(point2 - point)));
-        } else {
+        }
+        else
+        {
             point1 = SamplePoint(u + EPSILON, v);
             point2 = SamplePoint(u, v + EPSILON);
             normal = normalize(cross(normalize(point1 - point), normalize(point2 - point)));
