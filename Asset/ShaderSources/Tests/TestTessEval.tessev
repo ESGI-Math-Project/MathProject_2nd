@@ -254,7 +254,7 @@ vec3 SamplePoint(float u, float v)
         vec4 res = rota * vec4(displacement, 1);
         res /= res.w;
 
-        return point + res.xyz;
+        return res.xyz;
     }
     else
     {
